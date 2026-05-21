@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الفهد لإكسسوارات السيارات | النسخة الاحترافية الفاخرة</title>
-    <link rel="icon" href="fahd.icon">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
     <meta name="description" content="متجر الفهد لزينة وإكسسوارات السيارات - وجهتك الأولى للحصول على أفضل وأحدث كماليات السيارات بجودة عالية وأسعار تنافسية">
     <meta name="keywords" content="اكسسوارات سيارات, زينة سيارات, كماليات السيارات, الفهد للسيارات, مرسيدس, بي ام دبليو, تويوتا">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1049,20 +1049,28 @@
             navigate(routeId) {
                 document.querySelectorAll('.route-view').forEach(el => el.style.display = 'none');
                 document.querySelectorAll('header nav ul li').forEach(li => li.classList.remove('active'));
-                
                 if(routeId === 'home') {
                     document.getElementById('view-home').style.display = 'block';
-                    document.querySelector('header nav ul li[data-target="home"]').classList.add('active');
+                    const el = document.querySelector('header nav ul li[data-target="home"]');
+                    if(el) el.classList.add('active');
                 } else if(routeId === 'catalog') {
                     document.getElementById('view-catalog').style.display = 'block';
                 } else if(routeId === 'checkout') {
                     document.getElementById('view-checkout').style.display = 'block';
                 } else if(routeId === 'admin') {
                     document.getElementById('view-admin').style.display = 'block';
-                    document.querySelector('header nav ul li[data-target="admin"]').classList.add('active');
-                    admin.refreshDashboardState();
+                    const el = document.querySelector('header nav ul li[data-target="admin"]');
+                    if(el) el.classList.add('active');
+                    if(typeof admin !== 'undefined') admin.refreshDashboardState();
                 }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            syncRouteFromUrl() {
+                try {
+                    const hash = window.location.hash.replace('#','') || 'home';
+                    const valid = ['home','catalog','checkout','admin'];
+                    this.navigate(valid.includes(hash) ? hash : 'home');
+                } catch(e) { this.navigate('home'); }
             }
         }
         let router;
@@ -1269,7 +1277,7 @@
                     card.className = 'brand-premium-card';
                     card.onclick = () => this.bootBrandCatalogView(b.id);
                     card.innerHTML = `
-                        <div class="brand-img-wrap"><img src="${b.logo}" alt="Logo"></div>
+                        <div class="brand-img-wrap"><img src="${b.logo || 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=300'}" alt="Logo"></div>
                         <div class="brand-premium-meta">${this.currentLang === 'ar' ? b.name : b.id.toUpperCase() + ' Luxury Custom'}</div>
                     `;
                     container.appendChild(card);
@@ -1324,7 +1332,7 @@
                         <div class="prod-image-frame">
                             <div class="wishlist-trigger ${isWish}" onclick="ui.toggleWishlistItem('${prod.id}', this)"><i class="fa-solid fa-heart"></i></div>
                             <span class="prod-meta-tag">${prod.category}</span>
-                            <img src="${prod.img}">
+                            <img src="${prod.img || prod.image || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400'}">
                         </div>
                         <div class="prod-details-pane">
                             <h3 class="prod-title-text">${prod.name}</h3>
@@ -1371,7 +1379,7 @@
                         const card = document.createElement('div');
                         card.className = 'product-premium-card';
                         card.innerHTML = `
-                            <div class="prod-image-frame"><img src="${prod.img}"></div>
+                            <div class="prod-image-frame"><img src="${prod.img || prod.image || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400'}"></div>
                             <div class="prod-details-pane">
                                 <h3 class="prod-title-text">${prod.name}</h3>
                                 <p class="prod-desc-text">${prod.desc}</p>
@@ -1415,7 +1423,7 @@
                     const row = document.createElement('div');
                     row.className = 'cart-hardware-row';
                     row.innerHTML = `
-                        <img src="${prod.img}" class="cart-row-img">
+                        <img src="${prod.img || prod.image || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400'}" class="cart-row-img">
                         <div class="cart-row-meta">
                             <h4>${prod.name}</h4><p>${prod.price} ج.م</p>
                             <div class="cart-row-qty-ctrl">
@@ -1575,7 +1583,7 @@
                 const windowContent = document.getElementById('quickViewModalContent');
                 windowContent.innerHTML = `
                     <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:2.5rem; margin-top:1.5rem; flex-wrap:wrap;">
-                        <div style="background:#fff; border-radius:14px; padding:20px; display:flex; align-items:center; justify-content:center;"><img src="${prod.img}" style="max-width:100%; max-height:280px; object-fit:contain;"></div>
+                        <div style="background:#fff; border-radius:14px; padding:20px; display:flex; align-items:center; justify-content:center;"><img src="${prod.img || prod.image || 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=400'}" style="max-width:100%; max-height:280px; object-fit:contain;"></div>
                         <div>
                             <h2 style="font-size:2rem; font-weight:900; color:#fff; margin-bottom:1rem;">${prod.name}</h2>
                             <p style="color:var(--text-muted); font-size:1.05rem; margin-bottom:1.5rem; line-height:1.7;">${prod.desc}</p>
@@ -1696,7 +1704,7 @@
                 db.brands.forEach(b => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td><img src="${b.logo}" style="width:45px; height:45px; border-radius:8px; object-fit:cover;"></td>
+                        <td><img src="${b.logo || 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=300'}" style="width:45px; height:45px; border-radius:8px; object-fit:cover;"></td>
                         <td><strong>${b.name}</strong></td><td><span style="color:var(--accent); font-weight:700;">${b.category}</span></td>
                         <td>
                             <div style="display:flex; gap:10px;">
