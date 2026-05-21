@@ -2071,7 +2071,7 @@
                             image: String(img),
                             category: String(cat || ''),
                             brand: String(brand || ''),
-                            desc: String(desc || ''),
+                            product_desc: String(desc || ''),
                             old_price: oldPrice ? Number(oldPrice) : null
                         };
                         const { error } = await window.supabaseClient
@@ -2252,7 +2252,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
                                     image: String(p.img || p.image || ''),
                                     category: String(p.category || ''),
                                     brand: String(p.brand || ''),
-                                    desc: String(p.desc || ''),
+                                    product_desc: String(p.desc || ''),
                                     old_price: p.oldPrice ? Number(p.oldPrice) : null
                                 }], { onConflict: 'id' });
                             if (upsertErr) console.warn('Upsert error:', upsertErr.message);
@@ -2273,7 +2273,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
                         img: sp.image || local.img || '',
                         category: sp.category || local.category || '',
                         brand: sp.brand || local.brand || '',
-                        desc: sp.desc || local.desc || '',
+                        desc: sp.product_desc || local.desc || '',
                         oldPrice: sp.old_price || local.oldPrice || null
                     };
                 });
